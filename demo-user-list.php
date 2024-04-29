@@ -23,13 +23,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 add_action( 'init', 'dul_init' );
+
+register_activation_hook( __FILE__, 'dul_activate' );
+register_deactivation_hook( __FILE__, 'dul_deactivate' );
+
 /**
  * Setup database when the plugin is activated
  *
  * @return void
  */
 function dul_activate(): void {
-    maybe_create_my_table();
+    dul_maybe_create_user_table();
 }
 /**
  * Remove database when the plugin is deactivated
@@ -40,15 +44,13 @@ function dul_deactivate() {
     global $wpdb;
     $wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}demo_user" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 }
+
 /**
  * Call in the plugin functionalities on an init hook call
  *
  * @return void
  */
 function dul_init(): void {
-
-    register_activation_hook( __FILE__, 'dul_activate' );
-    register_deactivation_hook( __FILE__, 'dul_deactivate' );
 
     add_shortcode( 'dul_user_form', 'dul_shortcode_form' );
     add_shortcode( 'dul_user_list', 'dul_user_list_shortcode' );
@@ -60,7 +62,7 @@ function dul_init(): void {
  *
  * @return void
  */
-function maybe_create_my_table(): void {
+function dul_maybe_create_user_table(): void {
     global $wpdb;
     $table_name      = "{$wpdb->prefix}demo_user";
     $charset_collate = $wpdb->get_charset_collate();
@@ -229,7 +231,7 @@ function dul_register_endpoint(): void {
         array(
             'methods'     => 'GET',
             'callback'    => 'dul_get_users_callback',
-            'permissions' => 'dul_has_user_capability',
+            'permission_callback' => '__return_true',
         )
     );
 }
