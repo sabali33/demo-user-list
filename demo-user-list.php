@@ -210,13 +210,18 @@ function dul_insert_user(): void {
     $results = $wpdb->query( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
     if ( ! $results ) {
+        echo '<div style="color:red">';
         /* translators: %s: last error message */
         printf( esc_html__( 'Unable to save user data: %s', 'demo-user-list' ), esc_html( $wpdb->last_error ) );
+        echo '</div>';
         return;
     }
+    echo '<div style="color:#0a875a">';
 
     /* translators: 1: user name, 2: User age */
     printf( esc_html__( '%1$s, %2$d values has been saved', 'demo-user-list' ), esc_html( $name ), esc_html( $age ) );
+
+    echo '</div>';
 }
 
 /**
