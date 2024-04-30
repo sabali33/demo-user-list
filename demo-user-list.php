@@ -132,7 +132,7 @@ function dul_user_list_shortcode( array $attr ): string {
         $attr
     );
 
-    $users = dul_get_users( $page, $per_page, $order_by, $order, $search );
+    $users = dul_get_users( $page, (int)$per_page, $order_by, $order, $search );
 
     $output = '<ul>';
     foreach ( $users as $user ) {
